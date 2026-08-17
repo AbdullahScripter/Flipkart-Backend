@@ -27,4 +27,4 @@ app.get("/", (req, res) => {
   res.send("Backend Running Successfully 🚀");
 });
 
-export default app;
+export default app;    
