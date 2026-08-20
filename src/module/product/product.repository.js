@@ -7,21 +7,48 @@ const createProduct = async (productData) => {
 };
 
 
-const getAllProducts = async (page = 1, limit = 10) => {
+const getAllProducts = async (
+  page = 1,
+  limit = 10,
+  search = "",
+  category = "",
+  status = "",
+) => {
   const skip = (page - 1) * limit;
 
-  const products = await Product.find()
+  const query = {};
+
+  // Search
+  if (search) {
+    query.name = {
+      $regex: search,
+      $options: "i",
+    };
+  }
+
+  // Category
+  if (category) {
+    query.category = category;
+  }
+
+  // Status
+  if (status) {
+    query.isActive = status === "active";
+  }
+
+  const products = await Product.find(query)
     .populate("category")
     .skip(skip)
     .limit(limit);
 
-  const totalProducts = await Product.countDocuments();
+  const totalProducts = await Product.countDocuments(query);
 
   return {
     products,
     totalProducts,
     currentPage: page,
     totalPages: Math.ceil(totalProducts / limit),
+    limit,
   };
 };
 

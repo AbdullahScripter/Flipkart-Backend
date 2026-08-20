@@ -21,11 +21,30 @@ const createProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
   try {
-    const products = await productService.getAllProducts();
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    const search = req.query.search || "";
+    const category = req.query.category || "";
+    const status = req.query.status || "";
+
+    const result = await productService.getAllProducts(
+      page,
+      limit,
+      search,
+      category,
+      status,
+    );
 
     res.status(200).json({
       success: true,
-      data: products,
+      data: result.products,
+      pagination: {
+        currentPage: result.currentPage,
+        totalPages: result.totalPages,
+        totalProducts: result.totalProducts,
+        limit: result.limit,
+      },
     });
   } catch (error) {
     res.status(500).json({

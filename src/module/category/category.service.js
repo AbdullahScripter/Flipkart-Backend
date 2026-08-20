@@ -36,5 +36,4 @@ export default {
     findByName,
     updateCategory,
     deleteCategory
-
 }
