@@ -8,7 +8,8 @@ const createProduct = async (productData) => {
 
 
 const getAllProducts = async () => {
-  const products = await Product.find();
+  const products = await Product.find().populate("category");
+
   return products;
 };
 
