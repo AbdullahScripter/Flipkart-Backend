@@ -25,13 +25,13 @@ const getAllProducts = async (req, res) => {
     const limit = Number(req.query.limit) || 10;
 
     const category = req.query.category || "";
-    const status = req.query.status || "";
+    const search = req.query.search || "";
 
     const result = await productService.getAllProducts(
       page,
       limit,
       category,
-      status,
+      search,
     );
 
     res.status(200).json({
