@@ -10,38 +10,33 @@ const createProduct = async (productData) => {
 const getAllProducts = async (
   page = 1,
   limit = 10,
-  search = "",
   category = "",
   status = "",
 ) => {
   const skip = (page - 1) * limit;
 
-  const query = {};
+  const filter = {};
 
-  // Search
-  if (search) {
-    query.name = {
-      $regex: search,
-      $options: "i",
-    };
-  }
-
-  // Category
+  // Category filter
   if (category) {
-    query.category = category;
+    filter.category = category;
   }
 
-  // Status
-  if (status) {
-    query.isActive = status === "active";
+  // Status filter
+  if (status === "active") {
+    filter.isActive = true;
   }
 
-  const products = await Product.find(query)
+  if (status === "inactive") {
+    filter.isActive = false;
+  }
+
+  const products = await Product.find(filter)
     .populate("category")
     .skip(skip)
     .limit(limit);
 
-  const totalProducts = await Product.countDocuments(query);
+  const totalProducts = await Product.countDocuments(filter);
 
   return {
     products,
