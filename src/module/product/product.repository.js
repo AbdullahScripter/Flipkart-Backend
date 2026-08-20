@@ -12,23 +12,29 @@ const getAllProducts = async (
   limit = 10,
   category = "",
   status = "",
+  search = "",
 ) => {
   const skip = (page - 1) * limit;
 
   const filter = {};
 
-  // Category filter
   if (category) {
     filter.category = category;
   }
 
-  // Status filter
   if (status === "active") {
     filter.isActive = true;
   }
 
   if (status === "inactive") {
     filter.isActive = false;
+  }
+
+  if (search) {
+    filter.name = {
+      $regex: search,
+      $options: "i",
+    };
   }
 
   const products = await Product.find(filter)

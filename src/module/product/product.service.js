@@ -6,15 +6,14 @@ const createProduct = async (productData) => {
   return product;
 };
 
-const getAllProducts = async (page, limit, category, search) => {
-  const products = await productRepository.getAllProducts(
+const getAllProducts = async (page, limit, category, status, search) => {
+  return await productRepository.getAllProducts(
     page,
     limit,
     category,
+    status,
     search,
   );
-
-  return products;
 };
 
 const getProductById = async (id) => {
