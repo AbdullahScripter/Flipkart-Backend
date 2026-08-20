@@ -5,6 +5,7 @@ import categoryRoutes from "./module/category/category.routes.js";
 import bannerRoutes from "./module/banner/banner.route.js";
 import productRoutes from "./module/product/product.routes.js";
 import adminRoutes from "./module/admin/admin.route.js";
+import uploadRoutes from "./module/upload/upload.route.js";
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use("/api/products", productRoutes);
 
 
 app.use("/api/admin", adminRoutes);
+
+app.use("/api/upload", uploadRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend Running Successfully 🚀");
