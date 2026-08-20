@@ -7,10 +7,22 @@ const createProduct = async (productData) => {
 };
 
 
-const getAllProducts = async () => {
-  const products = await Product.find().populate("category");
+const getAllProducts = async (page = 1, limit = 10) => {
+  const skip = (page - 1) * limit;
 
-  return products;
+  const products = await Product.find()
+    .populate("category")
+    .skip(skip)
+    .limit(limit);
+
+  const totalProducts = await Product.countDocuments();
+
+  return {
+    products,
+    totalProducts,
+    currentPage: page,
+    totalPages: Math.ceil(totalProducts / limit),
+  };
 };
 
 
