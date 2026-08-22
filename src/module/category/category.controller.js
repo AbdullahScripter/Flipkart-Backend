@@ -10,13 +10,18 @@ const createCategory = async (req, res) => {
     data: category,
   });
 };
- const getAllCategory=async (req,res)=>{
-    const categories=await categoryService.getAllCategories();
-    res.status(200).json({
-        message:"Categories fetched successfully",
-        data:categories
-    })
- }
+const getAllCategory = async (req, res) => {
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 5;
+
+  const result = await categoryService.getAllCategories(page, limit);
+
+  res.status(200).json({
+    message: "Categories fetched successfully",
+    data: result.categories,
+    pagination: result.pagination,
+  });
+};
 
  const getCategoryById=async(req,res)=>{
     const {id} =req.params

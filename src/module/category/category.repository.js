@@ -5,7 +5,9 @@ const createCategory = async (categoryData) => {
   return category;
 };
 
-const getAllCategories = async () => {
+const getAllCategories = async (page = 1, limit = 5) => {
+  const skip = (page - 1) * limit;
+
   const categories = await Category.aggregate([
     {
       $lookup: {
@@ -17,9 +19,7 @@ const getAllCategories = async () => {
     },
     {
       $addFields: {
-        productCount: {
-          $size: "$products",
-        },
+        productCount: { $size: "$products" },
       },
     },
     {
@@ -27,9 +27,30 @@ const getAllCategories = async () => {
         products: 0,
       },
     },
+    {
+      $sort: {
+        createdAt: -1,
+      },
+    },
+    {
+      $skip: skip,
+    },
+    {
+      $limit: Number(limit),
+    },
   ]);
 
-  return categories;
+  const totalCategories = await Category.countDocuments();
+
+  return {
+    categories,
+    pagination: {
+      currentPage: Number(page),
+      totalPages: Math.ceil(totalCategories / limit),
+      totalCategories,
+      limit: Number(limit),
+    },
+  };
 };
 
 const getCategoryById = async (id) => {

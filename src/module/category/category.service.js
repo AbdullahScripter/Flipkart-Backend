@@ -5,10 +5,11 @@ const createCategory =async (categoryData) => {
     return category;
 }
 
-const getAllCategories =async ()=>{
-    const categories =await categoryRepository.getAllCategories();
-    return categories;
-}
+const getAllCategories = async (page, limit) => {
+  const categories = await categoryRepository.getAllCategories(page, limit);
+
+  return categories;
+};
 
 const getCategoryById = async (id)=>{
     const category = await categoryRepository.getCategoryById(id);
